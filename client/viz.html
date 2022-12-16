@@ -1,119 +1,69 @@
-async function fetchJson(yr) {
-    const main = await fetch(`api/finServices/${yr}`);
-    return await main.json();
-}
+<html lang="en-US">
 
-// Code for the making the chart 
-async function getChart(data, category) {
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>project-pgcounty-spending</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
 
-    const arr = data.map(i => ({ 'category': i[category], 'amount': i.amount }));
+<body>
 
-    const labels = [...new Set(data.map((i) => i[category]))];
-    let count = {};
-    labels.forEach(i => count[i] = 0);
+    <div class="wrapper">
 
-    arr.forEach(i => {
-        Object.keys(count).forEach(key => {
-            if (key == i.category) { count[key] += parseFloat(i.amount); }
-        })
-    });
+        <!--Code for header---------->
+        <header class="header">
+            <h2 class="header">
+                Prince George County Finance
+                <nav class="navbar">
+                    <a href='index.html'>Home</a>
+                    <a href='data.html'>Data</a>
+                    <a href=''>Visualization</a>
+                </nav>
+            </h2>
+        </header>
+        <div class="vcontainer">
+            <div class="inner">
+                <div class="left box">
+                    <h5>Select Year:</h5>
+                    <form action="/api" class="yr_form">
+                        <div class="small" id="butts">
+                            <script>
+                                window.addEventListener('load', (event) => {
+                                    addButt('#butts');
+                                });
+                            </script>
+                        </div>
+                        <div class="buttons">
+                            <a class="button1" name="b1" id="b1"> Fetch Payee</a>
+                            <a class="button1" name="b2" id="b2"> Fetch Agency</a>
+                            <a class="button1" name="b3" id="b3"> Fetch Zip</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="pcontainer">
+                <div class="vcontainer">
+                   
+                </div>
+                <div class=" ">
+                    <canvas class="" id="dochart"></canvas>
+                </div>
+                <div class=" ">
+                    <canvas class="" id="barchart"></canvas>
+                </div>
+            </div>
+        </div>
 
-    updatec(myChart, labels, count);
-    updatec(barchart, labels, count);
-    console.log(category, 'chart delivered');
-}
+        <div class="footer">
+            <a href="https://github.com/bw1umd/Project-pgcounty-spending.git">Github</a>
+        </div>
+    </div>
+    <script src="./viz.js"></script>
 
+</body>
 
-//update chart
-async function updatec(chart, labels, count) {
-    chart.config.data.labels = labels;
-    chart.config.data.datasets[0].label = "Total";
-    chart.config.data.datasets[0].data = Object.values(count);
-    chart.update();
-    console.log(chart, category, 'chart updated');
-}
-
-const dochart = document.getElementById('dochart');
-const bar = document.getElementById('barchart');
-
-const myChart = new Chart(dochart, {
-    type: "doughnut",
-    data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange", "Black", "Grey", "Pink",],
-        datasets: [{
-            label: "# of Votes",
-            data: [12, 19, 3, 5, 2, 3],
-            borderWidth: 1,
-        },],
-    }
-});
-
-const barchart = new Chart(bar, {
-    type: "bar",
-    data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange", "Black", "Grey", "Pink",],
-        datasets: [{
-            label: "# of Votes",
-            data: [12, 19, 3, 5, 2, 3],
-            borderWidth: 1,
-        },],
-    }
-});
-
-async function mainEvent() {
-    let yr = document.querySelector('.yr_form');
-    let data = await fetchJson(2022);
-    console.log(data.data.length);
-    await getChart(data.data, 'agency');
-
-    yr.addEventListener('input', async (event) => {
-        event.preventDefault();
-        data = await fetchJson(event.target.value);
-        console.log(data.data.length);
-        await getChart(data.data, 'agency');
-    });
-
-    if (data.data.length > 0) {
-        let b1 = document.querySelector('#b1');
-        let b2 = document.querySelector('#b2');
-        let b3 = document.querySelector('#b3');
-        b1.addEventListener('click', async (event) => {
-            event.preventDefault();
-            await getChart(data.data, 'payee_name');
-        });
-        b2.addEventListener('click', async (event) => {
-            event.preventDefault();
-            await getChart(data.data, 'agency');
-        });
-        b3.addEventListener('click', async (event) => {
-            event.preventDefault();
-            await getChart(data.data, 'zip_code');
-        });
-    }
-}
-
-function addButt(htmlelm) {
-    const form = document.querySelector(htmlelm);
-    for (var i = 0; i < 11; i++) {
-        var div = document.createElement('div');
-        var btn = document.createElement('input');
-        var labl = document.createElement('label');
-        div.className = 'combo';
-        btn.className = 'radiobutt';
-        btn.type = 'radio';
-        btn.name = 'butt';
-        const year = 2022 - i;
-        btn.id = year;
-        btn.value = year;
-        labl.htmlFor = year;
-        labl.innerText = year;
-        if (year === 2022) {
-            btn.checked = true;
-        }
-        div.appendChild(btn);
-        div.appendChild(labl);
-        form.appendChild(div);
-    }
-}
-
-document.addEventListener("DOMContentLoaded", async () => mainEvent());
+</html>
