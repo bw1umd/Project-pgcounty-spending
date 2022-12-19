@@ -1,7 +1,7 @@
 # Project-pgcounty-spending
 # README
 - Link to the Github Pages site where things are running
-    - [Prince George's County Finance](https://main.d3a5z6zabynccq.amplifyapp.com/index.html)
+    - [Prince George's County Finance](http://solo-env-1.eba-iwsi2hwx.us-east-1.elasticbeanstalk.com/index.html)
 - Title of your project
     - Prince George County Finance
 - Description of target browsers (iOS? Android? Which ones? Which versions?)
